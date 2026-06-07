@@ -1,21 +1,33 @@
-import os
+import subprocess
+import sys
+import os                    
+
+def install_dependencies():
+    """Checks and installs libraries ONLY if they are actually missing."""
+    dependencies = {
+        "customtkinter": "customtkinter",
+        "numpy": "numpy",
+        "PIL": "Pillow",         
+        "cryptography": "cryptography",
+        "Crypto": "pycryptodome"
+    }
+    
+    for import_name, pip_name in dependencies.items():
+        try:
+            __import__(import_name)
+        except ImportError:
+            print(f"[*] Missing library: {pip_name}. Installing now...")
+            subprocess.check_call([sys.executable, "-m", "pip", "install", pip_name])
+
+# Execute installer before anything else  
+install_dependencies()
+
+# --- Standard Imports ---
+import customtkinter as ctk
 import importlib
-
-try:
-    import customtkinter as ctk
-    import numpy as np
-    import PIL.Image
-    from PIL import ImageEnhance
-    import cryptography
-    import Crypto
-
-except ImportError:
-    print(
-        "\n[ERROR] Missing required dependencies.\n"
-        "\nInstall them using:\n"
-        "pip install -r requirements.txt\n"
-    )
-    raise
+import numpy as np 
+import PIL.Image             
+from PIL import ImageEnhance 
 def global_decrypt_shield(ciphertext, key, decrypt_function):
     """
     Centralized shield that runs the cipher's decryption and intercepts
